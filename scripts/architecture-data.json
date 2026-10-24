@@ -1,0 +1,278 @@
+{
+  "lanes": [
+    "Student UI",
+    "Node host",
+    "Live Query",
+    "Guarded files",
+    "Private settings"
+  ],
+  "arrows": [
+    [
+      0,
+      1,
+      "1. Validate a fixed classroom experiment"
+    ],
+    [
+      1,
+      4,
+      "2. Prepare a private project and settings home"
+    ],
+    [
+      1,
+      2,
+      "3. Build a typed asynchronous prompt stream"
+    ],
+    [
+      1,
+      2,
+      "4. Start one live Query object"
+    ],
+    [
+      2,
+      1,
+      "5. Observe actual turn-one configuration"
+    ],
+    [
+      0,
+      1,
+      "6. Wait for the student\u2019s Continue action"
+    ],
+    [
+      1,
+      2,
+      "7. Switch the model and permission mode"
+    ],
+    [
+      1,
+      2,
+      "8. Apply settings-file keys at runtime"
+    ],
+    [
+      2,
+      4,
+      "9. Persist local and user settings deliberately"
+    ],
+    [
+      1,
+      2,
+      "10. Release prompt two after acknowledgements"
+    ],
+    [
+      1,
+      3,
+      "11. Verify the actual file after the live query"
+    ],
+    [
+      1,
+      2,
+      "12. Load persisted settings in a fresh query"
+    ],
+    [
+      1,
+      0,
+      "13. Render results and compare observed turns"
+    ]
+  ],
+  "steps": [
+    {
+      "number": 1,
+      "title": "Validate a fixed classroom experiment",
+      "source": "src/server.ts",
+      "code": "const config = validateConfig(input);",
+      "language": "typescript",
+      "explanation": "The host accepts one of four fixed experiments. The browser cannot supply arbitrary model strings, paths, settings objects or executable callbacks.",
+      "firstLine": 61,
+      "lastLine": 61,
+      "anchors": [
+        "const config = validateConfig(input);"
+      ],
+      "sourceSHA256": "051aef5aa1258f020377548ac28cd215b83f35564461bbc6e91d5a2c9f36d0ba",
+      "narration": "Step one. The host accepts one of four fixed experiments. The browser cannot supply arbitrary model strings, paths, settings objects or executable callbacks. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 2,
+      "title": "Prepare a private project and settings home",
+      "source": "src/agent.ts",
+      "code": "await writeFile(\n  resolve(sdkHome(config), \"settings.json\"), \"{}\\n\"\n);",
+      "language": "typescript",
+      "explanation": "Each scenario owns its classroom files and private SDK home. Fresh runs reset only those experimental settings files, never normal user configuration.",
+      "firstLine": 30,
+      "lastLine": 30,
+      "anchors": [
+        "await writeFile(resolve(sdkHome(config), \"settings.json\"),"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step two. Each scenario owns its classroom files and private SDK home. Fresh runs reset only those experimental settings files, never normal user configuration. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 3,
+      "title": "Build a typed asynchronous prompt stream",
+      "source": "src/agent.ts",
+      "code": "async function* prompts(): AsyncGenerator<SDKUserMessage> {\n  yield userMessage(PROMPTS.first);\n  await secondReady;\n  // The actual second prompt depends on the experiment.\n  yield userMessage(PROMPTS.second);\n}",
+      "language": "typescript",
+      "explanation": "The generator yields a first user message and holds the next. The displayed normal read-task branch omits the plan-to-act prompt choice and cancellation check.",
+      "firstLine": 109,
+      "lastLine": 111,
+      "anchors": [
+        "await secondReady;",
+        "async function* prompts(): AsyncGenerator<SDKUserMessage> {"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step three. The generator yields a first user message and holds the next. The displayed normal read-task branch omits the plan-to-act prompt choice and cancellation check. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 4,
+      "title": "Start one live Query object",
+      "source": "src/agent.ts",
+      "code": "const session = query({ prompt: prompts(), options });",
+      "language": "typescript",
+      "explanation": "Keep the Query object returned by query. The SDK owns model/tool orchestration, while the host applies controls between completed prompts.",
+      "firstLine": 114,
+      "lastLine": 114,
+      "anchors": [
+        "const session = query({ prompt: prompts(), options });"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step four. Keep the Query object returned by query. The SDK owns model/tool orchestration, while the host applies controls between completed prompts. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 5,
+      "title": "Observe actual turn-one configuration",
+      "source": "src/agent.ts",
+      "code": "emit({ type: \"hook\",\n  phase: tracker.phase, turn: tracker.turn,\n  event: \"PreToolUse\",\n  permissionMode: input.permission_mode || null,\n  effort: input.effort?.level || null\n});",
+      "language": "typescript",
+      "explanation": "Hook metadata supplies observed permission and effort values; assistant messages separately supply actual model IDs. Missing metadata remains missing.",
+      "firstLine": 51,
+      "lastLine": 51,
+      "anchors": [
+        "permissionMode: input.permission_mode || null, effort: input.effort?.level || null"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step five. Hook metadata supplies observed permission and effort values; assistant messages separately supply actual model IDs. Missing metadata remains missing. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 6,
+      "title": "Wait for the student\u2019s Continue action",
+      "source": "src/agent.ts",
+      "code": "activeGate = { runId, release };\n// The host awaits this gate after the first result.",
+      "language": "typescript",
+      "explanation": "The first result pauses the host. Only a matching active run ID can release its gate through the Continue endpoint. The web button is an actual classroom approval action; tests automate it explicitly.",
+      "firstLine": 137,
+      "lastLine": 137,
+      "anchors": [
+        "activeGate = { runId, release };"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step six. The first result pauses the host. Only a matching active run ID can release its gate through the Continue endpoint. The web button is an actual classroom approval action; tests automate it explicitly. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 7,
+      "title": "Switch the model and permission mode",
+      "source": "src/agent.ts",
+      "code": "await control(\"setModel\", SECOND_MODEL,\n  () => session.setModel(SECOND_MODEL));\nawait control(\"setPermissionMode\", \"acceptEdits\",\n  () => session.setPermissionMode(\"acceptEdits\"));",
+      "language": "typescript",
+      "explanation": "For the model-switch experiment, await both real methods before prompt two. The plan-to-act branch uses only the permission-mode setter, and its file guard remains active.",
+      "firstLine": 88,
+      "lastLine": 89,
+      "anchors": [
+        "await control(\"setModel\", SECOND_MODEL, () => session.setModel(SECOND_MODEL));",
+        "await control(\"setPermissionMode\", \"acceptEdits\", () => session.setPermissionMode(\"acceptEdits\"));"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step seven. For the model-switch experiment, await both real methods before prompt two. The plan-to-act branch uses only the permission-mode setter, and its file guard remains active. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 8,
+      "title": "Apply settings-file keys at runtime",
+      "source": "src/agent.ts",
+      "code": "await session.applyFlagSettings({\n  effortLevel: \"medium\"\n});",
+      "language": "typescript",
+      "explanation": "Use effortLevel, the settings-file key, instead of the query option effort. The acknowledged method changes this session; hooks on the next task verify the active effort.",
+      "firstLine": 93,
+      "lastLine": 93,
+      "anchors": [
+        "await control(\"applyFlagSettings\", \"effortLevel: medium\", () => session.applyFlagSettings({ effortLevel: \"medium\" }));"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step eight. Use effortLevel, the settings-file key, instead of the query option effort. The acknowledged method changes this session; hooks on the next task verify the active effort. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 9,
+      "title": "Persist local and user settings deliberately",
+      "source": "src/agent.ts",
+      "code": "await session.updateSettings(\"localSettings\", {\n  outputStyle: \"Explanatory\"\n});\nawait session.updateSettings(\"userSettings\", {\n  effortLevel: \"medium\"\n});",
+      "language": "typescript",
+      "explanation": "The real SDK writer persists supported keys to private classroom files. Local output style applies on the next request; the user effort default does not change the current live session.",
+      "firstLine": 95,
+      "lastLine": 96,
+      "anchors": [
+        "await control(\"updateSettings(localSettings)\", \"outputStyle: Explanatory\", () => session.updateSettings(\"localSettings\", { outputStyle: \"Explanatory\" }));",
+        "await control(\"updateSettings(userSettings)\", \"effortLevel: medium\", () => session.updateSettings(\"userSettings\", { effortLevel: \"medium\" }));"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step nine. The real SDK writer persists supported keys to private classroom files. Local output style applies on the next request; the user effort default does not change the current live session. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 10,
+      "title": "Release prompt two after acknowledgements",
+      "source": "src/agent.ts",
+      "code": "await applyChanges(session, config, emit);\ntracker.turn = 2;\ntracker.acting = config.experiment === \"plan-act\";\n// Emit the released lifecycle event, then:\nreleaseSecond();",
+      "language": "typescript",
+      "explanation": "The host awaits every selected method before releasing the second user message. A rejected change prevents that release and remains a failure.",
+      "firstLine": 142,
+      "lastLine": 145,
+      "anchors": [
+        "await applyChanges(session, config, emit);",
+        "releaseSecond();"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step ten. The host awaits every selected method before releasing the second user message. A rejected change prevents that release and remains a failure. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 11,
+      "title": "Verify the actual file after the live query",
+      "source": "src/agent.ts",
+      "code": "const after = await readFile(\n  resolve(project(config), \"status.txt\"), \"utf8\"\n);",
+      "language": "typescript",
+      "explanation": "Read the real status file after closing the live query. A model claim or Edit request is not proof that the classroom change happened.",
+      "firstLine": 152,
+      "lastLine": 152,
+      "anchors": [
+        "const after = await readFile(resolve(project(config), \"status.txt\"), \"utf8\");"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step eleven. Read the real status file after closing the live query. A model claim or Edit request is not proof that the classroom change happened. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 12,
+      "title": "Load persisted settings in a fresh query",
+      "source": "src/agent.ts",
+      "code": "delete verificationOptions.effort;\n// Keep the private user/local setting sources.\nconst verification = query({\n  prompt: PROMPTS.first, options: verificationOptions\n});",
+      "language": "typescript",
+      "explanation": "The verification query omits an effort override and uses the same private settings files. Its new session has actual style/effort evidence distinct from the two live turns.",
+      "firstLine": 159,
+      "lastLine": 161,
+      "anchors": [
+        "delete verificationOptions.effort;",
+        "const verification = query({ prompt: PROMPTS.first, options: verificationOptions });"
+      ],
+      "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
+      "narration": "Step twelve. The verification query omits an effort override and uses the same private settings files. Its new session has actual style/effort evidence distinct from the two live turns. The source label identifies the corresponding application statements."
+    },
+    {
+      "number": 13,
+      "title": "Render results and compare observed turns",
+      "source": "src/client.ts",
+      "code": "if (e.type === \"answer\")\n  renderMarkdown($(\"answer\"), e.text);",
+      "language": "typescript",
+      "explanation": "Render actual model text with the bundled Markdown parser and sanitizer. Keep acknowledgements, model IDs, hooks, files and new-session evidence separate.",
+      "firstLine": 36,
+      "lastLine": 36,
+      "anchors": [
+        "if (e.type === \"answer\") renderMarkdown($(\"answer\"), e.text);"
+      ],
+      "sourceSHA256": "77436b2c4f5f2266630063eb0e310a0259ea3df2e5d1f6951384c8ede2504bc7",
+      "narration": "Step thirteen. Render actual model text with the bundled Markdown parser and sanitizer. Keep acknowledgements, model IDs, hooks, files and new-session evidence separate. The source label identifies the corresponding application statements."
+    }
+  ]
+}
