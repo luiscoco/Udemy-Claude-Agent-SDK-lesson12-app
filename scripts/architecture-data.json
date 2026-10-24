@@ -112,10 +112,11 @@
       "language": "typescript",
       "explanation": "The generator yields a first user message and holds the next. The displayed normal read-task branch omits the plan-to-act prompt choice and cancellation check.",
       "firstLine": 109,
-      "lastLine": 111,
+      "lastLine": 112,
       "anchors": [
         "await secondReady;",
-        "async function* prompts(): AsyncGenerator<SDKUserMessage> {"
+        "async function* prompts(): AsyncGenerator<SDKUserMessage> {",
+        "if (!controller.signal.aborted) yield userMessage("
       ],
       "sourceSHA256": "1f928bca0b1d61d58c013ca808685e11ad278c471101df26e44d6732bf7a30ee",
       "narration": "Step three. The generator yields a first user message and holds the next. The displayed normal read-task branch omits the plan-to-act prompt choice and cancellation check. The source label identifies the corresponding application statements."

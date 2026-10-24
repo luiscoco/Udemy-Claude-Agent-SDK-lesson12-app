@@ -35,7 +35,7 @@ specs=[
 ]
 lanes=['Student UI','Node host','Live Query','Guarded files','Private settings'];steps=[];arrows=[]
 words=['one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen']
-extra={3:['async function* prompts(): AsyncGenerator<SDKUserMessage> {'],7:['await control("setPermissionMode", "acceptEdits", () => session.setPermissionMode("acceptEdits"));'],9:['await control("updateSettings(userSettings)", "effortLevel: medium", () => session.updateSettings("userSettings", { effortLevel: "medium" }));'],10:['releaseSecond();'],12:['const verification = query({ prompt: PROMPTS.first, options: verificationOptions });']}
+extra={3:['async function* prompts(): AsyncGenerator<SDKUserMessage> {','if (!controller.signal.aborted) yield userMessage('],7:['await control("setPermissionMode", "acceptEdits", () => session.setPermissionMode("acceptEdits"));'],9:['await control("updateSettings(userSettings)", "effortLevel: medium", () => session.updateSettings("userSettings", { effortLevel: "medium" }));'],10:['releaseSecond();'],12:['const verification = query({ prompt: PROMPTS.first, options: verificationOptions });']}
 for n,(title,source,anchor,code,explanation,a,b) in enumerate(specs,1):
  text=(APP/source).read_text(encoding='utf-8');assert anchor in text,(n,anchor)
  anchors=[anchor]+extra.get(n,[]);lines=[text[:text.index(v)].count('\n')+1 for v in anchors]

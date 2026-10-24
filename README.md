@@ -83,7 +83,7 @@ await writeFile(
 
 The generator yields a first user message and holds the next. The displayed normal read-task branch omits the plan-to-act prompt choice and cancellation check.
 
-Source: `src/agent.ts`, lines 109–111. Selected source; surrounding code omitted.
+Source: `src/agent.ts`, lines 109–112. Selected source; surrounding code omitted.
 
 ```typescript
 async function* prompts(): AsyncGenerator<SDKUserMessage> {
